@@ -28,20 +28,31 @@ public class Main {
 //			System.out.println(data[i]);
 //		}
 
-		getIDWeather();
 
 	}
 
-	static void getData() {
+	static void init() throws IOException {
+		List<String[]> Prefectures = getPrec_no();
+		String tempArray[] = Prefectures.get(0);
+		String para[][] = blockPrameter(tempArray[1]);
 
+		StoreData.outputCsv("data.csv", "Shift-JIS", para);
+
+		for(int i = 0;i < para.length;i++) {
+			for(int j = 0;j < para[i].length;j++) {
+
+				System.out.print(para[i][j]+" ");
+			}
+			System.out.println();
+		}
 	}
 
 	//都道府県取得
-	static List<String[]> getPrefectures(){
+	static List<String[]> getPrec_no(){
 		//都道府県取得
-		Scraping sc = new Scraping(url+getAreaApp);
-		Elements el = sc.getDocument().select("area");
-		List<String> areaHref[] = new ArrayList[2];
+		Scraping sc = new Scraping(url+getAreaApp);//get document
+		Elements el = sc.getDocument().select("area");//select id
+		List<String> areaHref[] = new ArrayList[2];//to store list
 		for(int i = 0;i<areaHref.length;i++){
 			areaHref[i] = new ArrayList<String>();
 		}
@@ -53,13 +64,10 @@ public class Main {
 	}
 
 
-	static void getIDWeather() throws IOException{
-
-		List<String[]> Prefectures = getPrefectures();
-		String tempArray[] = Prefectures.get(0);
+	static String[][] blockPrameter(String prec_no) throws IOException{
 
 		//地点data 取得
-		Scraping sc = new Scraping(url +tempArray[1]);
+		Scraping sc = new Scraping(url +prec_no);
 		Elements el = sc.getDocument().select("area");
 		List<String> data = sc.getElementsAttrList(el, "href");//access url data
 		String onclick[] = sc.getElementsAttrArray(el, "onmouseover");//詳細データ
@@ -106,16 +114,11 @@ public class Main {
 				returnData[i][j+1] = onClickSplit[j];
 			}
 		}
-
-		for(int i = 0;i < returnData.length;i++) {
-			for(int j = 0;j < returnData[i].length;j++) {
-				System.out.print(i+" ");
-				System.out.print(returnData[i][j] +" ");
-			}
-			System.out.println();
-		}
-
+		return returnData;
 	}
 
+	static void getData() {
+
+	}
 
 }

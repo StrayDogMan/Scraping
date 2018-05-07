@@ -1,7 +1,9 @@
 package scraping;
 
-import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -15,10 +17,13 @@ import java.util.List;
 
 public class StoreData {
 
-	public static void outputCsv(String FileName, double Data[][]){
+	public static void outputCsv(String FileName, String CharaCode, double Data[][]){
 		if(FileName.indexOf(".csv") != -1){
 			try {
-				PrintWriter pw = new PrintWriter(new FileWriter(FileName, false));
+				PrintWriter pw =  new PrintWriter(
+						new BufferedWriter(
+								new OutputStreamWriter(
+										new FileOutputStream(FileName),CharaCode)));
 
 				for(int i=0;i<Data.length;i++){
 					pw.print(i+1);
@@ -39,10 +44,13 @@ public class StoreData {
 		}
 	}
 
-	public static void outputCsv(String FileName, String Data[][]){
+	public static void outputCsv(String FileName, String CharaCode, String Data[][]){
 		if(FileName.indexOf(".csv") != -1){
 			try {
-				PrintWriter pw = new PrintWriter(new FileWriter(FileName, false));
+				PrintWriter pw =  new PrintWriter(
+						new BufferedWriter(
+								new OutputStreamWriter(
+										new FileOutputStream(FileName),CharaCode)));
 
 				for(int i=0;i<Data.length;i++){
 					pw.print(i+1);
